@@ -8,11 +8,16 @@ export default config({
     posts: collection({
       label: 'Posts',
       slugField: 'title',
-      path: 'src/content/posts/*',
+      path: 'src/content/posts/hu/*',
       format: { contentField: 'content' },
       schema: {
-        title: fields.slug({ name: { label: 'Title' } }),
-        content: fields.markdoc({ label: 'Content' }),
+        title: fields.slug({ name: { label: 'Title - Cím' } }),
+        excerpt: fields.text({ 
+          label: 'Excerpt - Bevezető', 
+          multiline: true,
+          description: 'Ez jelenik meg a listaoldalakon.' 
+        }),
+        content: fields.markdoc({ label: 'Content - Tartalom' }),
       },
     }),
   },
