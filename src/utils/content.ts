@@ -20,7 +20,7 @@ const Utils = {
         liveId = this.stripExtension(post.id)
         if (liveId.indexOf('/') > 0) {
           // Ha a bal oldal undefined, az üres stringet kapja meg
-          liveId = liveId.split('/').at(-1) ?? ''; 
+          liveId = liveId.split('/').at(-2) ?? ''; 
           liveId = `${lang}/${collection}/${liveId}`; 
         }
         const regex = /<!--more-->/g;

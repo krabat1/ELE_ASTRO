@@ -42,7 +42,7 @@ export async function getStaticPaths() {
     // ID: "hu/masodik-poszt.mdoc"
     const parts = post.id.split('/');
     const lang = parts[0];
-    const slug = Utils.stripExtension(parts[parts.length - 1])
+    const slug = Utils.stripExtension(parts[parts.length - 2])
     //const collection = 'posts'; // Vagy post.collection
     const collection = post.collection; // Vagy post.collection
 
