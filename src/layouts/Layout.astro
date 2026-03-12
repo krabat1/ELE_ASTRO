@@ -1,15 +1,18 @@
 ---
-// src/layouts/Layout.astro
+import SEO from '../components/SEO.astro';
+
 interface Props {
   title?: string;
   description?: string;
   lang: string;
+  image?: string; 
 }
 
 const { 
   title = "Alapértelmezett Cím", 
   description = "Alapértelmezett leírás a weboldalról...", 
-  lang = "default"
+  lang = "default",
+  image
 } = Astro.props;
 ---
 <!doctype html>
@@ -22,12 +25,17 @@ const {
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
 		<meta name="description" content={description} />
+		<SEO
+			title={title || "Alapértelmezett Cím"} 
+      description={description || "Alapértelmezett leírás..."} 
+      lang={lang}
+      image={image}/><!--  -->
+			<slot name="head" />
 	</head>
 	<body>
 		<slot />
 	</body>
 </html>
-
 <style>
 	html,
 	body {

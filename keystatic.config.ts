@@ -17,6 +17,14 @@ const postCollection = (lang: 'hu' | 'en' | 'de', label: string) => collection({
       multiline: true,
       description: 'Ez jelenik meg a listaoldalakon.' 
     }),
+    coverImage: fields.image({
+      label: lang === 'hu' ? 'Borítókép' : (lang === 'en' ? 'Cover Image' : 'Titelbild'),
+      // 1. Ez mondja meg, hova mentse a fájlt fizikailag
+      directory: `src/content/posts/${lang}/`, 
+      // 2. Ez mondja meg, mi legyen a fájlban (relatív útvonal!)
+      publicPath: './', 
+      validation: { isRequired: false },
+    }),
     content: fields.markdoc({ 
       label: lang === 'hu' ? 'Tartalom' : (lang === 'en' ? 'Content' : 'Inhalt') 
     }),

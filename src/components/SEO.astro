@@ -1,0 +1,45 @@
+---
+import { imageConfig } from 'astro:assets';
+
+// src/components/SEO.astro
+interface Props {
+  title: string;
+  description: string;
+  lang: string;
+  image?: string;
+  canonicalURL?: URL;
+}
+
+const { title, description, lang, image, canonicalURL = Astro.url } = Astro.props;
+
+// Ha nincs image, akkor a public/default-share-image.jpg-t használjuk
+const finalImage = image || '/default-share-image.jpg';
+
+// Ezt az URL-t küldjük a Facebook-nak/Twitter-nek
+const socialImageURL = new URL(finalImage, Astro.url);
+
+const siteName = "A Te Oldalad Neve";
+---
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+<title>{title}</title>
+<meta name="title" content={title} />
+<meta name="description" content={description} />
+<link rel="canonical" href={canonicalURL} />
+
+<meta property="og:type" content="website" />
+<meta property="og:url" content={Astro.url} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={socialImageURL} />
+<meta property="og:site_name" content={siteName} />
+<meta property="og:locale" content={lang === 'hu' ? 'hu_HU' : (lang === 'de' ? 'de_DE' : 'en_US')} />
+
+<meta property="twitter:card" content="summary_large_image" />
+<meta property="twitter:url" content={Astro.url} />
+<meta property="twitter:title" content={title} />
+<meta property="twitter:description" content={description} />
+<meta property="twitter:image" content={socialImageURL} />

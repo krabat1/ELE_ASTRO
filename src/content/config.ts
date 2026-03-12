@@ -4,11 +4,11 @@ import { defineCollection, z } from 'astro:content';
 const postsCollection = defineCollection({
   // Mivel a Keystatic Markdoc-ot használ (.mdoc), ezt adjuk meg típusnak
   type: 'content', 
-  schema: z.object({
+  schema: ({ image }) => z.object({
     title: z.string(),
-    // Itt adhatsz hozzá további mezőket, amiket a Keystatic-ban is definiáltál
     // pl. publishDate: z.date().optional(),
-    excerpt: z.string().optional().default('')
+    excerpt: z.string().optional().default(''),
+    coverImage: image().optional(), // Az Astro ellenőrzi, hogy létezik-e a fájl!  }),
   }),
 });
 

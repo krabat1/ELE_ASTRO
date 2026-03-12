@@ -4,38 +4,6 @@ import Layout from '../../../layouts/Layout.astro'; // Itt figyeld az utat (két
 import Utils from '../../../utils/content';
 import {experimental_AstroContainer } from "astro/container";
 
-/*export async function getStaticPaths() {
-  // 1. Határozzuk meg az összes gyűjteményt, amit ezen a sablonon át akarunk látni
-  const collections = ['posts']; // Később: ['posts', 'news']
-
-  // 2. Minden gyűjteményből kérjük le az összes bejegyzést
-  const allEntries = await Promise.all(
-    collections.map(async (col) => {
-      const entries = await getCollection(col as CollectionKey);
-      return entries.map(entry => ({ ...entry, collectionName: col }));
-    })
-  );
-const flattenedEntries = allEntries.flat();
-
-  // 3. Gyártsuk le a paramétereket minden egyes fájlhoz
-  return flattenedEntries.map((entry) => {
-    // entry.id formátuma: "hu/elso-poszt.mdoc"
-    const [lang, ...slugParts] = entry.id.split('/');
-    console.log(lang);
-    const slug = slugParts.join('/').replace(/\.[^/.]+$/, "");
-    const collection = entry.collectionName; // Ez lesz a 'posts'
-
-    return {
-      params: { lang, collection, slug }, // EZEKNEK EGYEZNIE KELL A MAPPA NEVEIVEL!
-      props: { entry },
-    };
-  });
-}
-
-// Itt már a generált oldalon vagyunk
-const { entry } = Astro.props;
-const { Content } = await entry.render();*/
-
 export async function getStaticPaths() {
   const allPosts = await getCollection('posts');
 
@@ -46,15 +14,16 @@ export async function getStaticPaths() {
     const slug = Utils.stripExtension(parts[parts.length - 2])
     //const collection = 'posts'; // Vagy post.collection
     const collection = post.collection; // Vagy post.collection
+    const image = post.data?.coverImage?.src || undefined;
 
     return {
       params: { lang, collection, slug },
-      props: { post },
+      props: { post, image }, // 
     };
   });
 }
 
-const { post } = Astro.props;
+const { post, image } = Astro.props;
 const { lang } = Astro.params;
 
 const container = await experimental_AstroContainer.create();
@@ -67,7 +36,8 @@ const { Content } = await post.render();
 <Layout 
   title={post.data.title} 
   description={description}
-  lang={lang}>
+  lang={lang}
+  image={image}><!--  -->
   <article>
     <h1>{post.data.title}</h1>
     <Content />

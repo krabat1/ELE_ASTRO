@@ -24,26 +24,6 @@ const Utils = {
           liveId = `${lang}/${collection}/${liveId}`; 
         }
 
-        /*const excerptField = post.data.excerpt?.trim() || "";
-
-        if (excerptField.length > 0) {
-          finalExcerpt = excerptField;
-        } else if (post.body.includes("<!--more-->")) {
-          finalExcerpt = post.body.split("<!--more-->")[0];
-        } else {
-          // Itt használjuk a már létező containert
-          const { Content } = await render(post);
-          const html = await container.renderToString(Content);
-
-          finalExcerpt = html
-            .replace(/<[^>]*>?/gm, "") // HTML tagek eltávolítása
-            .replace(/\s+/g, " ") // Minden fehér karakter (szóköz, újsor) normalizálása
-            .trim()
-            .split(" ")
-            .slice(0, 25) // Egy kicsit több szó talán jobban mutat
-            .join(" ")
-            .concat("...");
-        }*/
         finalExcerpt = await this.singlePostExcerpt(post, container)
         return { ...post, finalExcerpt, liveId };
       }),

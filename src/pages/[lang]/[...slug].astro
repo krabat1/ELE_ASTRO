@@ -10,8 +10,6 @@ export async function getStaticPaths() {
     // A fájl elérési útja: src/content/pages/hu/rolunk/index.mdoc
     // Felbontjuk: ['src', 'content', 'pages', 'hu', 'rolunk', 'index.mdoc']
     const pathParts = page.id.split('/');
-    console.log('pathParts')
-    console.log(pathParts)
 
     
     const lang = pathParts[0]; // 'hu' vagy 'en'
@@ -27,6 +25,7 @@ export async function getStaticPaths() {
 //const { lang, slug } = Astro.params;
 const { page } = Astro.props;
 const { lang } = Astro.params;
+const defaultImage = '/default-share-image.jpg';
 const { Content } = await page.render();
 
 // Hiba, ha nem található (opcionális)
@@ -37,14 +36,8 @@ if (!page) {
 <Layout 
   title={page.data.title} 
   description={page.data.description} 
-  lang={lang}>
+  lang={lang}
+  image={defaultImage}>
     <h1>{page.data.title}</h1>
     <Content />
 </Layout>
-<!-- html lang={lang}>
-  <head>
-    <title>{page.data.title}</title>
-  </head>
-  <body>
-  </body>
-</!-->
