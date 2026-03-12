@@ -12,6 +12,7 @@ export async function getStaticPaths() {
     const pathParts = page.id.split('/');
     console.log('pathParts')
     console.log(pathParts)
+
     
     const lang = pathParts[0]; // 'hu' vagy 'en'
     const slug = pathParts[1]; // 'rolunk' vagy 'kapcsolat'
@@ -25,6 +26,7 @@ export async function getStaticPaths() {
 
 //const { lang, slug } = Astro.params;
 const { page } = Astro.props;
+const { lang } = Astro.params;
 const { Content } = await page.render();
 
 // Hiba, ha nem található (opcionális)
@@ -32,8 +34,10 @@ if (!page) {
   return Astro.redirect('/404');
 }
 ---
-
-<Layout title="Bejegyzések">
+<Layout 
+  title={page.data.title} 
+  description={page.data.description} 
+  lang={lang}>
     <h1>{page.data.title}</h1>
     <Content />
 </Layout>

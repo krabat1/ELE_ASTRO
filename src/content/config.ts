@@ -16,6 +16,7 @@ const pages = defineCollection({
   type: 'content', // vagy 'data', ha nincs body
   schema: z.object({
     title: z.string(),
+    description: z.string().optional(), // Ne felejtsd el itt is átvezetni!
     // egyéb mezők...
   }),
 });

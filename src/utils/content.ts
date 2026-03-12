@@ -23,8 +23,8 @@ const Utils = {
           liveId = liveId.split('/').at(-2) ?? ''; 
           liveId = `${lang}/${collection}/${liveId}`; 
         }
-        const regex = /<!--more-->/g;
-        const excerptField = post.data.excerpt?.trim() || "";
+
+        /*const excerptField = post.data.excerpt?.trim() || "";
 
         if (excerptField.length > 0) {
           finalExcerpt = excerptField;
@@ -43,13 +43,39 @@ const Utils = {
             .slice(0, 25) // Egy kicsit több szó talán jobban mutat
             .join(" ")
             .concat("...");
-        }
-
-        
-
+        }*/
+        finalExcerpt = await this.singlePostExcerpt(post, container)
         return { ...post, finalExcerpt, liveId };
       }),
     );
   },
+  async singlePostExcerpt(
+    post: CollectionEntry<"posts">,
+    container: experimental_AstroContainer,
+){
+
+    const excerptField = post.data.excerpt?.trim() || "";
+
+    if (excerptField.length > 0) {
+      return excerptField;
+    } else if (post.body.includes("<!--more-->")) {
+      return post.body.split("<!--more-->")[0];
+    } else {
+      // Itt használjuk a már létező containert
+      const { Content } = await render(post);
+      const html = await container.renderToString(Content);
+
+      return html
+        .replace(/<[^>]*>?/gm, "") // HTML tagek eltávolítása
+        .replace(/\s+/g, " ") // Minden fehér karakter (szóköz, újsor) normalizálása
+        .trim()
+        .split(" ")
+        .slice(0, 25) // Egy kicsit több szó talán jobban mutat
+        .join(" ")
+        .concat("...");
+    }
+
+
+  }
 };
 export default Utils;

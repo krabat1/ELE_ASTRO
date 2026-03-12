@@ -40,6 +40,7 @@ export default config({
       format: { contentField: "content" },
       schema: {
         title: fields.text({ label: "Cím" }),
+        description: fields.text({ label: "SEO Leírás", multiline: true }), // Új mező
         content: fields.markdoc({ label: "Tartalom" }),
       },
     }),
