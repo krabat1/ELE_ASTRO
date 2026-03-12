@@ -12,7 +12,16 @@ const postsCollection = defineCollection({
   }),
 });
 
+const pages = defineCollection({
+  type: 'content', // vagy 'data', ha nincs body
+  schema: z.object({
+    title: z.string(),
+    // egyéb mezők...
+  }),
+});
+
 // 2. Exportáljuk a gyűjteményeket az Astro számára
 export const collections = {
   'posts': postsCollection,
+  'pages': pages,
 };

@@ -1,4 +1,4 @@
-import { config, fields, collection } from '@keystatic/core';
+import { config, fields, collection, singleton } from '@keystatic/core';
 
 const postCollection = (lang: 'hu' | 'en' | 'de', label: string) => collection({
   label: `Posts - ${label}`,
@@ -22,14 +22,26 @@ const postCollection = (lang: 'hu' | 'en' | 'de', label: string) => collection({
     }),
   },
 });
-/*posts*/
+
+
 export default config({
   storage: {
-    kind: 'local',
+    kind: "local",
   },
   collections: {
-    posts_hu: postCollection('hu', 'Magyar'),
-    posts_en: postCollection('en', 'English'),
-    posts_de: postCollection('de', 'Deutsch'),
+    posts_hu: postCollection("hu", "Magyar"),
+    posts_en: postCollection("en", "English"),
+    posts_de: postCollection("de", "Deutsch"),
+  },
+  singletons: {
+    page_hu_rolunk: singleton({
+      label: "Rólunk (HU)",
+      path: "src/content/pages/hu/about/", 
+      format: { contentField: "content" },
+      schema: {
+        title: fields.text({ label: "Cím" }),
+        content: fields.markdoc({ label: "Tartalom" }),
+      },
+    }),
   },
 });

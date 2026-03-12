@@ -1,0 +1,46 @@
+---
+// src/pages/[lang]/[...slug].astro
+import { getCollection, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+
+export async function getStaticPaths() {
+  const pages = await getCollection('pages');
+  
+  return pages.map((page) => {
+    // A fájl elérési útja: src/content/pages/hu/rolunk/index.mdoc
+    // Felbontjuk: ['src', 'content', 'pages', 'hu', 'rolunk', 'index.mdoc']
+    const pathParts = page.id.split('/');
+    console.log('pathParts')
+    console.log(pathParts)
+    
+    const lang = pathParts[0]; // 'hu' vagy 'en'
+    const slug = pathParts[1]; // 'rolunk' vagy 'kapcsolat'
+
+    return {
+      params: { lang: lang, slug: slug }, // URL: /hu/rolunk
+      props: { page },
+    };
+  });
+}
+
+//const { lang, slug } = Astro.params;
+const { page } = Astro.props;
+const { Content } = await page.render();
+
+// Hiba, ha nem található (opcionális)
+if (!page) {
+  return Astro.redirect('/404');
+}
+---
+
+<Layout title="Bejegyzések">
+    <h1>{page.data.title}</h1>
+    <Content />
+</Layout>
+<!-- html lang={lang}>
+  <head>
+    <title>{page.data.title}</title>
+  </head>
+  <body>
+  </body>
+</!-->
