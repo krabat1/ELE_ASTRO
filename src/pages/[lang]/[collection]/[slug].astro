@@ -37,7 +37,7 @@ const { Content } = await post.render();
 <Layout 
   title={post.data.title} 
   description={description}
-  lang={lang}
+  lang={lang as 'hu' | 'en' | 'de'}
   image={image}
   hrefLang={hrefLang}>
   <article>

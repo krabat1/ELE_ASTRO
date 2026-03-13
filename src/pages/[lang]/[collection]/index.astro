@@ -26,7 +26,7 @@ const processedPosts = await Utils.makeExcerptsOnIndex(rawPosts, container, lang
 <Layout 
   title="Bejegyzések" 
   description="Bejegyzések listája" 
-  lang={lang}>
+  lang={lang as 'hu' | 'en' | 'de'}>
   <ul>
     {processedPosts.map(post => (
       <li>

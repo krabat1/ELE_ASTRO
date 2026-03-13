@@ -1,18 +1,21 @@
 ---
 import SEO from '../components/SEO.astro';
+import LanguageSwitcher from '../components/LanguageSwitcher.astro';
 
 interface Props {
   title?: string;
   description?: string;
-  lang: string;
-  image?: string; 
+  lang: 'hu' | 'en' | 'de';
+  image?: string;
+  hrefLang?: string|undefined
 }
 
 const { 
   title = "Alapértelmezett Cím", 
   description = "Alapértelmezett leírás a weboldalról...", 
-  lang = "default",
-  image
+  lang,
+  image,
+  hrefLang 
 } = Astro.props;
 ---
 <!doctype html>
@@ -29,10 +32,14 @@ const {
 			title={title || "Alapértelmezett Cím"} 
       description={description || "Alapértelmezett leírás..."} 
       lang={lang}
-      image={image}/><!--  -->
+      image={image} />
 			<slot name="head" />
 	</head>
 	<body>
+    <LanguageSwitcher 
+      lang={lang}
+      hrefLang={hrefLang}
+    />
 		<slot />
 	</body>
 </html>

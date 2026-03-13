@@ -39,7 +39,7 @@ if (!page) {
 <Layout 
   title={page.data.title} 
   description={page.data.description} 
-  lang={lang}
+  lang={lang as 'hu' | 'en' | 'de'}
   image={defaultImage}
   hrefLang={page.data.hrefLang}>
     <h1>{page.data.title}</h1>
