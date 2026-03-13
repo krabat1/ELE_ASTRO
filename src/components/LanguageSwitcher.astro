@@ -1,0 +1,56 @@
+---
+// src/components/LanguageSwitcher.astro
+interface Props {
+  lang: 'hu' | 'en' | 'de';
+  hrefLang?: string;
+}
+
+const { lang, hrefLang } = Astro.props;
+
+const languages = {
+  hu: { label: 'Magyar', flag: '🇭🇺', base: '/hu/', hreflang: 'hu-HU' },
+  en: { label: 'English', flag: '🇬🇧', base: '/en/', hreflang: 'en-US' },
+  de: { label: 'Deutsch', flag: '🇩🇪', base: '/de/', hreflang: 'de-DE' }
+};
+
+// 1. Meghatározzuk, melyik két nyelv marad
+const remainingCodes = (Object.keys(languages) as Array<keyof typeof languages>)
+  .filter(code => code !== lang);
+
+// 2. Szétszedjük a kapott slug-okat, ha vannak
+const slugs = hrefLang ? hrefLang.split(',').map(s => s.trim()) : [];
+
+// 3. Összeállítjuk a linkeket
+const switcherData = remainingCodes.map((code, index) => {
+  const baseData = languages[code];
+  // Ha van megadott slug az adott indexen, akkor azt használjuk, egyébként marad a főoldal
+  const finalHref = slugs[index] ? `${baseData.base}${slugs[index]}` : baseData.base;
+  
+  return {
+    ...baseData,
+    href: finalHref,
+    code
+  };
+});
+---
+
+<nav class="lang-switcher">
+  {switcherData.map((item) => (
+    <a 
+      href={item.href} 
+      hreflang={item.hreflang} 
+      title={item.label}
+      class="lang-link"
+    >
+      <span class="flag">{item.flag}</span>
+      <span class="label">{item.code.toUpperCase()}</span>
+    </a>
+  ))}
+</nav>
+
+<style>
+  .lang-switcher { display: flex; gap: 1rem; }
+  .lang-link { text-decoration: none; display: flex; align-items: center; gap: 0.3rem; }
+  .flag { font-size: 1.2rem; }
+  .label { font-size: 0.9rem; font-weight: bold; }
+</style>

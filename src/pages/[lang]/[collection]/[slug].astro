@@ -15,15 +15,16 @@ export async function getStaticPaths() {
     //const collection = 'posts'; // Vagy post.collection
     const collection = post.collection; // Vagy post.collection
     const image = post.data?.coverImage?.src || undefined;
+    const hrefLang = post.data?.hrefLang || undefined;
 
     return {
       params: { lang, collection, slug },
-      props: { post, image }, // 
+      props: { post, image, hrefLang }, // 
     };
   });
 }
 
-const { post, image } = Astro.props;
+const { post, image, hrefLang } = Astro.props;
 const { lang } = Astro.params;
 
 const container = await experimental_AstroContainer.create();
@@ -37,7 +38,8 @@ const { Content } = await post.render();
   title={post.data.title} 
   description={description}
   lang={lang}
-  image={image}><!--  -->
+  image={image}
+  hrefLang={hrefLang}>
   <article>
     <h1>{post.data.title}</h1>
     <Content />

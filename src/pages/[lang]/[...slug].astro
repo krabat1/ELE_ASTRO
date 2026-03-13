@@ -15,9 +15,12 @@ export async function getStaticPaths() {
     const lang = pathParts[0]; // 'hu' vagy 'en'
     const slug = pathParts[1]; // 'rolunk' vagy 'kapcsolat'
 
+    const hrefLang = page.data?.hrefLang || undefined;
+
+
     return {
       params: { lang: lang, slug: slug }, // URL: /hu/rolunk
-      props: { page },
+      props: { page, hrefLang },
     };
   });
 }
@@ -37,7 +40,8 @@ if (!page) {
   title={page.data.title} 
   description={page.data.description} 
   lang={lang}
-  image={defaultImage}>
+  image={defaultImage}
+  hrefLang={page.data.hrefLang}>
     <h1>{page.data.title}</h1>
     <Content />
 </Layout>

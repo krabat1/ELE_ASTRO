@@ -44,11 +44,46 @@ export default config({
   singletons: {
     page_hu_rolunk: singleton({
       label: "Rólunk (HU)",
-      path: "src/content/pages/hu/about/", 
+      path: "src/content/pages/hu/rolunk/", 
       format: { contentField: "content" },
       schema: {
         title: fields.text({ label: "Cím" }),
-        description: fields.text({ label: "SEO Leírás", multiline: true }), // Új mező
+        description: fields.text({ label: "Meta description", multiline: true }), // Új mező
+        hrefLang: fields.text({ 
+          label: 'Fordítások slug-jai', 
+          description: 'Vesszővel elválasztva. EN-slug, DE-slug.',
+          validation: { isRequired: false }
+        }),
+        content: fields.markdoc({ label: "Tartalom" }),
+      },
+    }),
+    page_en_rolunk: singleton({
+      label: "About us (EN)",
+      path: "src/content/pages/en/about-us/", 
+      format: { contentField: "content" },
+      schema: {
+        title: fields.text({ label: "Cím" }),
+        description: fields.text({ label: "Meta description", multiline: true }), // Új mező
+        hrefLang: fields.text({ 
+          label: 'Fordítások slug-jai', 
+          description: 'Vesszővel elválasztva. HU-slug, DE-slug.',
+          validation: { isRequired: false }
+        }),
+        content: fields.markdoc({ label: "Tartalom" }),
+      },
+    }),
+    page_de_rolunk: singleton({
+      label: "Über uns (DE)",
+      path: "src/content/pages/de/uber-uns/", 
+      format: { contentField: "content" },
+      schema: {
+        title: fields.text({ label: "Cím" }),
+        description: fields.text({ label: "Meta description", multiline: true }), // Új mező
+        hrefLang: fields.text({ 
+          label: 'Fordítások slug-jai', 
+          description: 'Vesszővel elválasztva. HU-slug, EN-slug.',
+          validation: { isRequired: false }
+        }),
         content: fields.markdoc({ label: "Tartalom" }),
       },
     }),

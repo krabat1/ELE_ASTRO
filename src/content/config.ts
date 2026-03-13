@@ -9,6 +9,7 @@ const postsCollection = defineCollection({
     // pl. publishDate: z.date().optional(),
     excerpt: z.string().optional().default(''),
     coverImage: image().optional(), // Az Astro ellenőrzi, hogy létezik-e a fájl!  }),
+    hrefLang: z.string().optional(),
   }),
 });
 
@@ -18,6 +19,7 @@ const pages = defineCollection({
     title: z.string(),
     description: z.string().optional(), // Ne felejtsd el itt is átvezetni!
     // egyéb mezők...
+    hrefLang: z.string().optional(),
   }),
 });
 
