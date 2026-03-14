@@ -14,5 +14,8 @@
     "@keystatic/astro": "^5.0.6",
     "astro": "^5.17.1",
     "shiki": "^4.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^25.5.0"
   }
 }

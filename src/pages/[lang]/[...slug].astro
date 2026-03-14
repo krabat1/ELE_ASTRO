@@ -15,18 +15,21 @@ export async function getStaticPaths() {
     const lang = pathParts[0]; // 'hu' vagy 'en'
     const slug = pathParts[1]; // 'rolunk' vagy 'kapcsolat'
 
+    const collection = page.collection; 
     const hrefLang = page.data?.hrefLang || undefined;
 
 
     return {
       params: { lang: lang, slug: slug }, // URL: /hu/rolunk
-      props: { page, hrefLang },
+      props: { page, collection, hrefLang },
     };
   });
 }
 
 //const { lang, slug } = Astro.params;
 const { page } = Astro.props;
+const { collection } = Astro.props;
+const { hrefLang } = Astro.props;
 const { lang } = Astro.params;
 const defaultImage = '/default-share-image.jpg';
 const { Content } = await page.render();
@@ -41,7 +44,8 @@ if (!page) {
   description={page.data.description} 
   lang={lang as 'hu' | 'en' | 'de'}
   image={defaultImage}
-  hrefLang={page.data.hrefLang}>
+  collection={collection}
+  hrefLang={hrefLang}>
     <h1>{page.data.title}</h1>
     <Content />
 </Layout>

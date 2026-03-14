@@ -25,6 +25,11 @@ const postCollection = (lang: 'hu' | 'en' | 'de', label: string) => collection({
       publicPath: './', 
       validation: { isRequired: false },
     }),
+    hrefLang: fields.text({ 
+      label: 'Fordítások slug-jai (SEO)', 
+      description: 'Vesszővel elválasztva. (HU: "EN,DE"; EN: "HU,DE"; DE: "HU,EN")',
+      validation: { isRequired: false }
+    }),
     content: fields.markdoc({ 
       label: lang === 'hu' ? 'Tartalom' : (lang === 'en' ? 'Content' : 'Inhalt') 
     }),
@@ -50,7 +55,7 @@ export default config({
         title: fields.text({ label: "Cím" }),
         description: fields.text({ label: "Meta description", multiline: true }), // Új mező
         hrefLang: fields.text({ 
-          label: 'Fordítások slug-jai', 
+          label: 'Fordítások slug-jai (SEO)', 
           description: 'Vesszővel elválasztva. EN-slug, DE-slug.',
           validation: { isRequired: false }
         }),
@@ -65,7 +70,7 @@ export default config({
         title: fields.text({ label: "Cím" }),
         description: fields.text({ label: "Meta description", multiline: true }), // Új mező
         hrefLang: fields.text({ 
-          label: 'Fordítások slug-jai', 
+          label: 'Fordítások slug-jai (SEO)', 
           description: 'Vesszővel elválasztva. HU-slug, DE-slug.',
           validation: { isRequired: false }
         }),
@@ -80,7 +85,7 @@ export default config({
         title: fields.text({ label: "Cím" }),
         description: fields.text({ label: "Meta description", multiline: true }), // Új mező
         hrefLang: fields.text({ 
-          label: 'Fordítások slug-jai', 
+          label: 'Fordítások slug-jai (SEO)', 
           description: 'Vesszővel elválasztva. HU-slug, EN-slug.',
           validation: { isRequired: false }
         }),

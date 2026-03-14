@@ -9,6 +9,7 @@ export async function getStaticPaths() {
   return [
     { params: { lang: 'hu', collection: 'posts' } },
     { params: { lang: 'en', collection: 'posts' } },
+    { params: { lang: 'de', collection: 'posts' } },
   ];
 }
 
@@ -26,7 +27,10 @@ const processedPosts = await Utils.makeExcerptsOnIndex(rawPosts, container, lang
 <Layout 
   title="Bejegyzések" 
   description="Bejegyzések listája" 
-  lang={lang as 'hu' | 'en' | 'de'}>
+  lang={lang as 'hu' | 'en' | 'de'}
+  image='default-share-image.jpg'
+  collection={collection}
+  hrefLang='posts,posts'>
   <ul>
     {processedPosts.map(post => (
       <li>

@@ -1,16 +1,20 @@
 ---
 // src/components/LanguageSwitcher.astro
+import fs from 'node:fs';
+import path from 'node:path';
+
 interface Props {
-  lang: 'hu' | 'en' | 'de';
+  lang?: 'hu' | 'en' | 'de';
+  collection?: string;
   hrefLang?: string;
 }
 
-const { lang, hrefLang } = Astro.props;
+const { lang, collection, hrefLang } = Astro.props;
 
 const languages = {
-  hu: { label: 'Magyar', flag: '🇭🇺', base: '/hu/', hreflang: 'hu-HU' },
-  en: { label: 'English', flag: '🇬🇧', base: '/en/', hreflang: 'en-US' },
-  de: { label: 'Deutsch', flag: '🇩🇪', base: '/de/', hreflang: 'de-DE' }
+  hu: { label: 'Magyar', flag: '🇭🇺', base: '/hu/', languageTag: 'hu-HU' },
+  en: { label: 'English', flag: '🇬🇧', base: '/en/', languageTag: 'en-US' },
+  de: { label: 'Deutsch', flag: '🇩🇪', base: '/de/', languageTag: 'de-DE' }
 };
 
 // 1. Meghatározzuk, melyik két nyelv marad
@@ -22,14 +26,40 @@ const slugs = hrefLang ? hrefLang.split(',').map(s => s.trim()) : [];
 
 // 3. Összeállítjuk a linkeket
 const switcherData = remainingCodes.map((code, index) => {
-  const baseData = languages[code];
+  const baseData = languages[code]; //
   // Ha van megadott slug az adott indexen, akkor azt használjuk, egyébként marad a főoldal
-  const finalHref = slugs[index] ? `${baseData.base}${slugs[index]}` : baseData.base;
+
+  const targetSlug = slugs[index];
   
+  let finalHref = baseData.base;
+  // Alapértelmezetten undefined, így nem kerül ki hreflang attribútum
+  let activeLanguageTag: string | undefined = undefined; 
+
+  if (targetSlug && collection) {
+    const filePath = path.join(process.cwd(), 'src/content', collection, code, targetSlug, 'index.mdoc');
+
+    if (fs.existsSync(filePath)) {
+      // Ha létezik a fájl, aktiváljuk a nyelvi címkét
+      activeLanguageTag = baseData.languageTag;
+      
+      if (collection === 'pages') {
+        finalHref = `${baseData.base}${targetSlug}`;
+      } else {
+        // Posts esetén bekerül a gyűjtemény neve is az URL-be
+        finalHref = `${baseData.base}${collection}/${targetSlug}`;
+      }
+    } else {
+      console.warn(`[LangSwitcher] Hiányzó fájl: ${filePath}. Visszaállítás főoldalra.`);
+      finalHref = baseData.base;
+    }
+  }
+
+  // Itt egy ÚJ objektumot adunk vissza, nem az eredeti baseData-t módosítjuk
   return {
     ...baseData,
     href: finalHref,
-    code
+    languageTag: activeLanguageTag,
+    code: code
   };
 });
 ---
@@ -38,7 +68,7 @@ const switcherData = remainingCodes.map((code, index) => {
   {switcherData.map((item) => (
     <a 
       href={item.href} 
-      hreflang={item.hreflang} 
+      hreflang={item.languageTag} 
       title={item.label}
       class="lang-link"
     >

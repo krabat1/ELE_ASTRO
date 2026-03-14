@@ -36,6 +36,8 @@ const Utils = {
 
     const excerptField = post.data.excerpt?.trim() || "";
 
+    post.body ? post.body = post.body : post.body = '';
+
     if (excerptField.length > 0) {
       return excerptField;
     } else if (post.body.includes("<!--more-->")) {

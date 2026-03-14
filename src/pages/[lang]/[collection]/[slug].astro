@@ -19,12 +19,12 @@ export async function getStaticPaths() {
 
     return {
       params: { lang, collection, slug },
-      props: { post, image, hrefLang }, // 
+      props: { post, image, collection, hrefLang }, // 
     };
   });
 }
 
-const { post, image, hrefLang } = Astro.props;
+const { post, image, collection, hrefLang } = Astro.props;
 const { lang } = Astro.params;
 
 const container = await experimental_AstroContainer.create();
@@ -39,6 +39,7 @@ const { Content } = await post.render();
   description={description}
   lang={lang as 'hu' | 'en' | 'de'}
   image={image}
+  collection={collection}
   hrefLang={hrefLang}>
   <article>
     <h1>{post.data.title}</h1>

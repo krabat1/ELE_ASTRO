@@ -5,9 +5,10 @@ import LanguageSwitcher from '../components/LanguageSwitcher.astro';
 interface Props {
   title?: string;
   description?: string;
-  lang: 'hu' | 'en' | 'de';
+  lang?: 'hu' | 'en' | 'de';
   image?: string;
-  hrefLang?: string|undefined
+  collection?: string;
+  hrefLang?: string|undefined;
 }
 
 const { 
@@ -15,6 +16,7 @@ const {
   description = "Alapértelmezett leírás a weboldalról...", 
   lang,
   image,
+  collection,
   hrefLang 
 } = Astro.props;
 ---
@@ -30,14 +32,15 @@ const {
 		<meta name="description" content={description} />
 		<SEO
 			title={title || "Alapértelmezett Cím"} 
-      description={description || "Alapértelmezett leírás..."} 
-      lang={lang}
-      image={image} />
+			description={description} 
+			lang={lang as 'hu' | 'en' | 'de'}
+			image={image} />
 			<slot name="head" />
 	</head>
 	<body>
     <LanguageSwitcher 
       lang={lang}
+	  collection={collection}
       hrefLang={hrefLang}
     />
 		<slot />
