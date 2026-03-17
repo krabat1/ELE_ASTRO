@@ -1,0 +1,93 @@
+---
+// src/components/LanguageSwitcher.astro
+import fs from "node:fs";
+import path from "node:path";
+
+interface Props {
+  lang?: "hu" | "en" | "de";
+  collection?: string;
+  hrefLang?: string;
+}
+
+const { lang, collection, hrefLang } = Astro.props;
+
+let currentLang: "hu" | "en" | "de" =  Astro.props.lang ? Astro.props.lang: 'hu';
+
+const languages = {
+  hu: { base: "/hu/", languageTag: "hu-HU" },
+  en: { base: "/en/", languageTag: "en-US" },
+  de: { base: "/de/", languageTag: "de-DE" },
+};
+
+// 1. Meghatározzuk, melyik két másik nyelvhez kell <link>-et készíteni
+const remainingCodes = (
+  Object.keys(languages) as Array<keyof typeof languages>
+).filter((code) => code !== lang);
+
+
+// 2. Szétszedjük a kapott slug-okat, ha vannak
+const slugs = hrefLang ? hrefLang.split(",").map((s) => s.trim()) : [];
+
+// 3. Összeállítjuk a linkeket
+const alternateData = remainingCodes.map((code, index) => {
+  const baseData = languages[code]; //
+  // Ha van megadott slug az adott indexen, akkor azt használjuk, egyébként marad a főoldal
+
+  const targetSlug = slugs[index];
+
+  let finalHref = baseData.base;
+  // Alapértelmezetten undefined, így nem kerül ki hreflang attribútum
+  let activeLanguageTag: string | undefined = undefined;
+
+  if (targetSlug && collection) {
+    const filePath = path.join(
+      process.cwd(),
+      "src/content",
+      collection,
+      code,
+      targetSlug,
+      "index.mdoc",
+    );
+
+    if (fs.existsSync(filePath)) {
+      // Ha létezik a fájl, aktiváljuk a nyelvi címkét
+      activeLanguageTag = baseData.languageTag;
+
+      if (collection === "pages") {
+        finalHref = `${baseData.base}${targetSlug}`;
+      } else {
+        // Posts esetén bekerül a gyűjtemény neve is az URL-be
+        finalHref = `${baseData.base}${collection}/${targetSlug}`;
+      }
+    } else if (targetSlug == "posts") {
+      // posts index!
+      finalHref = `${baseData.base}${targetSlug}`;
+    } else {
+      console.warn(
+        `[LangSwitcher] Hiányzó fájl: ${filePath}. Visszaállítás főoldalra.`,
+      );
+      finalHref = baseData.base;
+    }
+  }
+  // Itt egy ÚJ objektumot adunk vissza, nem az eredeti baseData-t módosítjuk
+  return {
+    ...baseData,
+    href: finalHref,
+    languageTag: activeLanguageTag,
+    code: code,
+    needToWrite: targetSlug && targetSlug.length > 0,
+  };
+});
+
+---
+
+{ 
+  <>
+  {alternateData.map((item) => (
+    item.languageTag && item.needToWrite && (
+      <link rel="alternate" hreflang={item.languageTag} href={item.href} />
+    )
+  ))}
+</>
+}
+<link rel="alternate" hreflang={languages[currentLang].languageTag} href={Astro.url.pathname} />

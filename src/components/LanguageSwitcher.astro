@@ -48,6 +48,9 @@ const switcherData = remainingCodes.map((code, index) => {
         // Posts esetén bekerül a gyűjtemény neve is az URL-be
         finalHref = `${baseData.base}${collection}/${targetSlug}`;
       }
+    } else if (targetSlug == 'posts'){
+      // posts index!
+      finalHref = `${baseData.base}${targetSlug}`;
     } else {
       console.warn(`[LangSwitcher] Hiányzó fájl: ${filePath}. Visszaállítás főoldalra.`);
       finalHref = baseData.base;
